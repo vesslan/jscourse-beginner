@@ -3,8 +3,15 @@
 <head>
    <title>Hello, world!</title>
    <script type="text/javascript">
+   // Say personalized hello.
+   // We store the `prompt` input into a variable `salute`, as we're going to
+   // use the value more than once.
+   var salute  = 'Hello, ' + prompt( 'Please enter your name:' ) + '!';
    // say personalized hello
-   alert( 'Hello, ' + prompt('Please enter your name:') );
+   alert( salute );
+   // Change browser title line
+   // We need to modify the text of the <title> tag
+   document.documentElement.firstChild.firstChild.nextSibling.innerHTML = salute;
    </script>
 </head>
 <body>
