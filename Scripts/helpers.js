@@ -1,4 +1,24 @@
 /** 
+ * @function typeOf
+ *
+ * Accepts mixed content & returns the correct type.
+ *
+ * @param variable {Mixed}
+ *
+ * @returns {String}
+**/
+function typeOf( variable ) {
+   var type = typeof variable;
+   switch ( type ) {
+   case 'object':
+      return !variable ? 'null' : variable.constructor.name.toLowerCase();
+   case 'number':
+      return isNaN( variable ) ? 'NaN' : 'number';
+   }
+   return type;
+}
+
+/** 
  * @function toArray
  *
  * Accepts mixed parameters and transforms them into Array.
