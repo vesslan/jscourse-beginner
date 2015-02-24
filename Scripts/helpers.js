@@ -57,3 +57,29 @@ function extend( obj ) {
    }
    return obj;
 }
+
+/*--------------------------------------------------------------- MISSING API */
+
+/**
+ * Function.prototype.bind
+ *
+ * Creates new function and on execution calls that function, changing the context
+ * and passing some arguments.
+ *
+ * @param context {Object} The new function context (represented by `this`)
+ * @param argN    {Mixed}  Arguments that will be "hard-coded" in the new function
+ *
+ * @returns {Function}
+**/
+! Function.prototype.bind && (Function.prototype.bind = function ( obj ) {
+   var args = toArray( arguments );       // transform `arguments` into real array
+   var fn   = this;                       // `fn` is the source function
+   
+   // Create new function that calls our original function, applying 
+   // `obj` as context and binding the remaining parameters.
+   return function () {
+      // On execution, we call the source `fn` function with `obj` as context.
+      // We also concatinate the bound `args` with passed `arguments`.
+      return fn.apply( obj, args.concat.apply( args, arguments ) );
+   }
+});
