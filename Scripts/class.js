@@ -10,14 +10,14 @@
  *
  * @returns {Function} constructor
 **/
-function Class( prototype ) {
-   prototype         = prototype || {};
-   var parent        = typeof prototype.Extends == 'function' ? prototype.Extends.prototype : {};
+function Class( new_prototype ) {
+   new_prototype     = new_prototype || {};
+   var parent_proto  = typeof new_prototype.Extends == 'function' ? new_prototype.Extends.prototype : {};
    // create our constructor - use provided `initialize`
    // method or create empty function
    var constructor   = function () {
       // get the constructor function
-      var fn               = (prototype.initialize || parent.initialize || function () {});
+      var fn               = (new_prototype.initialize || parent_proto.initialize || function () {});
       // create empty function that we will use for the real constructor
       var Instance         = function () {};
       // link prototypes
@@ -32,7 +32,7 @@ function Class( prototype ) {
    }
    // set the prototype object
    // inherit properties & methods from the parent class
-   constructor.prototype = extend( {}, parent, prototype );
+   constructor.prototype = extend( {}, parent_proto, new_prototype );
    // set name to all annonymous functions
    for ( var name in constructor.prototype ) {
       if ( typeof( constructor.prototype[ name ] ) == 'function' ) {
@@ -42,9 +42,10 @@ function Class( prototype ) {
    }
    // make parent method calling available via `this.parent()`
    constructor.prototype.parent = function () {
-      var fn = parent[ arguments.callee.caller.__name__ ];
+      var method_name = arguments.callee.caller.__name__;
+      var fn = parent_proto[ method_name ];
       if ( typeof fn !== 'function' ) {
-         throw new Error('Cannot call `parent`');
+         throw new Error('Parent method ' + method_name + ' is not defined!');
       }
       return fn.apply( this, arguments );
    }
