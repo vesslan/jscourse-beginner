@@ -4,10 +4,6 @@
  * @requires  Class
  */
 
-var Traffic = new Class({
+var Traffic = function () {
    
-   initialize : function () {
-      
-   }
-   
-});
+}
