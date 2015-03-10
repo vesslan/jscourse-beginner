@@ -48,11 +48,28 @@ function getNext( elem ) {
    return elem;
 }
 
+/** 
+ * @function getChildren
+ * 
+ * Returns element's children, ignoring white space
+ *
+ * @param elem {HTMLElement}  The element whose children (HTML elements) we want to get
+ *
+ * @returns {Array}
+**/
+function getChildren( elem ) {
+   var children = [].slice.call( elem.childNodes );
+   return children.filter( function ( child ) {
+      return !! child.tagName;
+   });
+}
+
 // Adding these methods to HTMLElement.prototype
 [
    'getElemsByTag',
    'getPrevious',
-   'getNext'
+   'getNext',
+   'getChildren'
 ].forEach( function ( fn ) {
    HTMLElement.prototype[ fn ] = function () {
       var args = [].slice.call( arguments );
