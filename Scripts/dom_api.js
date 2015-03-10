@@ -16,8 +16,48 @@ function getElemsByTag( ancestor, tag ) {
    return ancestor.getElementsByTagName( tag );
 }
 
-// Make this method available to every single element
-HTMLElement.prototype.getElemsByTag = function ( tag ) {
-   return getElemsByTag( this, tag );
+/** 
+ * @function getPrevious
+ * 
+ * Returns previous sibling, ignoring white space
+ *
+ * @param elem {HTMLElement}  The element whose previous sibling we want to get
+ *
+ * @returns {HTMLElement}
+**/
+function getPrevious( elem ) {
+   do {
+      elem = elem.previousSibling;
+   } while ( elem && ! elem.tagName );
+   return elem;
 }
+
+/** 
+ * @function getNext
+ * 
+ * Returns next sibling, ignoring white space
+ *
+ * @param elem {HTMLElement}  The element whose next sibling we want to get
+ *
+ * @returns {HTMLElement}
+**/
+function getNext( elem ) {
+   do {
+      elem = elem.nextSibling;
+   } while ( elem && ! elem.tagName );
+   return elem;
+}
+
+// Adding these methods to HTMLElement.prototype
+[
+   'getElemsByTag',
+   'getPrevious',
+   'getNext'
+].forEach( function ( fn ) {
+   HTMLElement.prototype[ fn ] = function () {
+      var args = [].slice.call( arguments );
+      args.unshift( this );
+      return window[ fn ].apply( null, args );
+   }
+});
 
