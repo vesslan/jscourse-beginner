@@ -176,6 +176,38 @@ function inject( elem, relative, where ) {
    }
 }
 
+/** 
+ * @function grab
+ * 
+ * Adopts given element
+ *
+ * @param elem    {HTMLElement}  The parent element
+ * @param child   {HTMLElement}  The element we want to adopt
+ * @param where   {String}       The position we want to inject the child, default "bottom"
+**/
+function grab( elem, child, where ) {
+   if ( where !== 'top' ) {
+      where = 'bottom';
+   }
+   inject( child, elem, where );
+}
+
+/** 
+ * @function wrap
+ * 
+ * Injects element next to a specified element and then adopts that element
+ *
+ * @param elem    {HTMLElement}  The parent element
+ * @param child   {HTMLElement}  The element we want to adopt
+ * @param where   {String}       The position we want to inject the child, default "bottom"
+**/
+function wrap( elem, child, where ) {
+   // first `inject` the `elem` next to the `child`
+   inject( elem, child, 'before' );
+   // then grab the `child`
+   grab( elem, child, where );
+}
+
 // Adding these methods to HTMLElement.prototype
 [
    'getElemsByTag',
@@ -185,7 +217,9 @@ function inject( elem, relative, where ) {
    'getChildren',
    'getAttributes',
    'setAttributes',
-   'inject'
+   'inject',
+   'grab',
+   'wrap'
 ].forEach( function ( fn ) {
    HTMLElement.prototype[ fn ] = function () {
       var args = [].slice.call( arguments );
