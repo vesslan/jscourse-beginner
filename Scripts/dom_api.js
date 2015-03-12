@@ -13,7 +13,37 @@
 function getElemsByTag( ancestor, tag ) {
    tag      = tag       || '*';  // get all elements by default
    ancestor = ancestor  || document;
-   return ancestor.getElementsByTagName( tag );
+   return toArray( ancestor.getElementsByTagName( tag ) );
+}
+
+/** 
+ * @function getElemsByClass
+ * 
+ * Returns all matched elements having class name(s)
+ *
+ * @param ancestor   {Element}   element, default `document`
+ * @param name       {String}    class name(s)
+ *
+ * @returns          {Array}     Elements collection
+**/
+function getElemsByClass( ancestor, name ) {
+   ancestor = ancestor  || document;
+   if ( ancestor.getElementsByClassName ) {
+      // API natively supported
+      return [].slice.call( ancestor.getElementsByClassName( name ) );
+   }
+   return toArray( getElemsByTag( '*', ancestor ) ).filter( function ( elem ) {
+      var classes = name.split(' ');
+      for ( var i=0; i<classes.length; i += 1 ) {
+         if ( ! classes[i] ) {
+            continue;
+         }
+         if ( elem.className.split(' ').indexOf( classes[i] ) == -1 ) {
+            return false;
+         }
+      }
+      return true;
+   });
 }
 
 /** 
@@ -67,6 +97,7 @@ function getChildren( elem ) {
 // Adding these methods to HTMLElement.prototype
 [
    'getElemsByTag',
+   'getElemsByClass',
    'getPrevious',
    'getNext',
    'getChildren'
