@@ -128,6 +128,54 @@ function setAttributes( elem, pairs ) {
    }
 }
 
+/** 
+ * @function inject
+ * 
+ * Injects element related to another element in the DOM
+ *
+ * @param elem       {HTMLElement}  The element we want to inject
+ * @param relative   {HTMLElement}  The element relative to which we want to place our element
+ * @param where      {String}       The position related to the relative element, default "bottom"
+**/
+function inject( elem, relative, where ) {
+   if ( ! elem || ! relative ) {
+      throw new Error('`inject` requires `elem` and `relative` params');
+   }
+   // default position is "bottom"
+   if ( ['top', 'before', 'after'].indexOf( where ) < 0 ) {
+      where = 'bottom';
+   }
+   switch ( where ) {
+   case 'bottom':
+      relative.appendChild( elem );
+      break;
+   case 'top':
+      // try insertBefore firstChild
+      var first_child = relative.firstChild;
+      first_child && relative.insertBefore( elem, first_child ) ||
+            relative.appendChild( elem );
+      break;
+   case 'before':
+      var parent_node = relative.parentNode;
+      // we just can't inject before `document`, <html>
+      if ( [undefined, document, document.documentElement].indexOf( parent_node ) > -1 ) {
+         throw new Error('Cannot `inject` "before"');
+      }
+      parent_node.insertBefore( elem, relative );
+      break;
+   case 'after':
+      var next_sibling = relative.previousSibling;
+      if ( next_sibling ) {
+         inject( elem, next_sibling, 'before' );
+      } else if ( relative.parentNode ) {
+         // appendChild will do here
+         relative.parentNode.appendChild( elem );
+      } else {
+         throw new Error('Cannot `inject` "after"');
+      }
+   }
+}
+
 // Adding these methods to HTMLElement.prototype
 [
    'getElemsByTag',
@@ -136,7 +184,8 @@ function setAttributes( elem, pairs ) {
    'getNext',
    'getChildren',
    'getAttributes',
-   'setAttributes'
+   'setAttributes',
+   'inject'
 ].forEach( function ( fn ) {
    HTMLElement.prototype[ fn ] = function () {
       var args = [].slice.call( arguments );
