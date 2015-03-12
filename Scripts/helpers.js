@@ -238,6 +238,46 @@ function colorToHex( color ) {
    })[ color ] || color;
 }
 
+/** 
+ * @function toCamelCase
+ * 
+ * Transforms string written in "dashed-notation" into "camelCase"
+ *
+ * @param string {String}
+ *
+ * @returns {String}
+**/
+function toCamelCase( string ) {
+   var parts = string.split('-');
+   for ( var i=1; i<parts.length; i += 1 ) {
+      // capitalize the first letter
+      parts[i] = parts[i].charAt(0).toUpperCase() + parts[i].slice(1);
+   }
+   return parts.join('');
+}
+
+/** 
+ * @function toDashes
+ * 
+ * Transforms string written in "camelCase" into "dashed-notation"
+ *
+ * @param string {String}
+ *
+ * @returns {String}
+**/
+function toDashes( string ) {
+   var chars = [];   // we use array for the concatenation as it's faster
+   for ( var i=0, l=string.length; i<l; i += 1 ) {
+      var character = string.charAt(i).toLowerCase(); // lower-case the char
+      if ( string.charAt(i) !== character ) {
+         // prepend a dash
+         chars.push('-');
+      }
+      chars.push( character );
+   }
+   return chars.join('');
+}
+
 /*--------------------------------------------------------------- MISSING API */
 
 /**
