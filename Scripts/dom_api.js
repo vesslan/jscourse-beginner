@@ -94,13 +94,49 @@ function getChildren( elem ) {
    });
 }
 
+/** 
+ * @function getAttributes
+ * 
+ * Returns attributes' values by given attribute names (Array)
+ * 
+ * @param  {HTMLElement}   elem  HTML Element whose attributes' values we want
+ * @param  {Array}         attrs Array of attribute names
+ * 
+ * @returns {Array}  Attributes' values
+ */
+function getAttributes( elem, attrs ) {
+   var values = [];   // here we keep attribute values
+   for ( var i=0, l=attrs.length; i<l; i += 1 ) {
+      values.push( elem.getAttribute( attrs[i] ) );
+   }
+   return values;
+}
+
+/** 
+ * @function setAttributes
+ * 
+ * Sets multiple attributes' values
+ * 
+ * @param {HTMLElement} elem  HTML Element whose attributes' values we want to set
+ * @param {Object}      pairs Hash - attribute_name:attribute_value pairs
+ */
+function setAttributes( elem, pairs ) {
+   for ( var name in pairs ) {
+      if ( pairs.hasOwnProperty( name ) ) {
+         elem.setAttribute( name, pairs[ name ] );
+      }
+   }
+}
+
 // Adding these methods to HTMLElement.prototype
 [
    'getElemsByTag',
    'getElemsByClass',
    'getPrevious',
    'getNext',
-   'getChildren'
+   'getChildren',
+   'getAttributes',
+   'setAttributes'
 ].forEach( function ( fn ) {
    HTMLElement.prototype[ fn ] = function () {
       var args = [].slice.call( arguments );
